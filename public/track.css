@@ -1,0 +1,54 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2em;
+}
+body::before { content: ""; position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0, 0, 0, 0.2); z-index:-1; }
+.track-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 30vw;
+}
+.track-title{
+    padding: 1em;
+    font-size: 2em;
+}
+.track-cover{
+    width: 30vw;
+    height: auto;
+}
+.platforms{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    padding: 3em;
+    border-radius: 0.5em;
+}
+.platform-row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 2em 0;
+}
+.play-btn{
+    color: black;
+    text-decoration: none;
+    background-color: rgb(235, 234, 234);
+    padding: 0.8em 1.6em;
+    border-radius: 0.3em;
+    font-weight: 700;
+    font-style: bold;
+    font-size: 16px;
+    font-family: sans-serif;
+}
