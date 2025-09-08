@@ -241,7 +241,17 @@ input::placeholder{
       display: flex;
       flex-direction: column;
       height: auto;
-      width: 450px;
+      width: 90vw;
+    }
+    .track{
+      font-size: 1.2em;
+    }
+    .new-music h1{
+      font-size: 1.7em;
+    }
+    .listen-now{
+      width: 30vw;
+      font-size: 1.2em;
     }
     .image{
       height: 80vh;
@@ -255,7 +265,9 @@ input::placeholder{
    }
    .terms{
       margin-top: 2em;
-      width: 700px;
+      width: 90vw;
+      font-size: 10px;
+      font-weight: 700;
    }
    .email-terms{
       width: 100%;
@@ -263,5 +275,28 @@ input::placeholder{
       justify-content: center;
       display: flex;
       flex-direction: column;
+   }
+   .footer{
+      padding: 0.8em;
+   }
+   .footer h1{
+      font-size: 12px;
+      width: 50vw;
+      text-align: center;
+   }
+   .icons{
+      padding: 1em;
+   }
+   .icons .icon img{
+      width: 18px;
+      height: 18px;
+      margin-bottom: 10px;
+   }
+   .footer-menu{
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      gap: 10px;
+      font-size: 10px;
    }
 }
