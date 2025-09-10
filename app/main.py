@@ -16,7 +16,7 @@ app = FastAPI(title="Artist Music Platform API")
 # CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://ambitionsmiler.netlify.app"],
+    allow_origins=["https://ambitionsmiler.netlify.app", "https://ambitionsmiler.com"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
