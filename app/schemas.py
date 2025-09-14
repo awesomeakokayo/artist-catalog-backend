@@ -20,8 +20,7 @@ class CatalogUpdate(CatalogBase):
 
 class CatalogOut(CatalogBase):
     id: int
-    cover_image: Optional[str]
-    created_at: datetime
+    cover_image_mime: Optional[str] = None
 
     class Config:
-        from_attributes = True
+        orm_mode = True

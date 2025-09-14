@@ -7,11 +7,12 @@ def get_catalogs(db: Session, skip: int = 0, limit: int = 100):
 def get_catalog(db: Session, catalog_id: int):
     return db.query(models.Catalog).filter(models.Catalog.id == catalog_id).first()
 
-def create_catalog(db: Session, catalog: schemas.CatalogCreate, cover_path: str = None):
+def create_catalog(db: Session, catalog: schemas.CatalogCreate, image_bytes: bytes = None, mime: str = None):
     db_item = models.Catalog(
         title=catalog.title,
         description=catalog.description,
-        cover_image=cover_path,
+        cover_image_data=image_bytes,
+        cover_image_mime=mime,
         spotify_url=catalog.spotify_url,
         apple_music_url=catalog.apple_music_url,
         audiomack_url=catalog.audiomack_url,
@@ -24,11 +25,12 @@ def create_catalog(db: Session, catalog: schemas.CatalogCreate, cover_path: str 
     db.refresh(db_item)
     return db_item
 
-def update_catalog(db: Session, db_obj: models.Catalog, updates: schemas.CatalogUpdate, cover_path: str = None):
+def update_catalog(db: Session, db_obj: models.Catalog, updates: schemas.CatalogUpdate, image_bytes: bytes = None, mime: str = None):
     for field, value in updates.dict(exclude_unset=True).items():
         setattr(db_obj, field, value)
-    if cover_path:
-        db_obj.cover_image = cover_path
+    if image_bytes:
+        db_obj.cover_image_data = image_bytes
+        db_obj.cover_image_mime = mime
     db.commit()
     db.refresh(db_obj)
     return db_obj   

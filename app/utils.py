@@ -1,19 +1,14 @@
-# utils.py
-import os
-from pathlib import Path
+import io
 from uuid import uuid4
 from fastapi import UploadFile
-
-BASE_DIR = Path(__file__).resolve().parent
-UPLOAD_DIR = BASE_DIR / "uploads" / "music"
-UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+from PIL import Image
 
 ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png", "gif", "webp"}
 
-async def save_upload_file(upload_file: UploadFile) -> str:
+async def save_upload_file_to_db(upload_file: UploadFile) -> tuple:
     """
-    Save an UploadFile to uploads/music and return the public path used by the API.
-    Example return: "/uploads/music/abcd1234.jpg"
+    Process an uploaded file and return (bytes, mime, unique_name).
+    You can then insert these into Neon DB.
     """
     filename = upload_file.filename or ""
     ext = filename.split(".")[-1].lower()
@@ -21,13 +16,13 @@ async def save_upload_file(upload_file: UploadFile) -> str:
         raise ValueError("Unsupported file type")
 
     unique_name = f"{uuid4().hex}.{ext}"
-    dest = UPLOAD_DIR / unique_name
 
-    # read file bytes asynchronously from UploadFile
     contents = await upload_file.read()
-    # write to disk (sync write is fine here; if you want fully async use aiofiles)
-    with open(dest, "wb") as f:
-        f.write(contents)
 
-    # return a path that matches the StaticFiles mount in main.py
-    return f"/uploads/music/{unique_name}"
+    img = Image.open(io.BytesIO(contents)).convert("RGBA")
+    buf = io.BytesIO()
+    img.save(buf, format="WEBP", quality=80)
+    buf.seek(0)
+    contents = buf.read()
+
+    return contents, "image/webp", unique_name
