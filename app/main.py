@@ -11,7 +11,7 @@ app = FastAPI(title="Artist Music Platform API")
 # CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["https://ambitionsmiler.netlify.app", "https://ambitionsmiler.com", "*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -88,7 +88,7 @@ async def protected_create_catalog(
 ):
     img_bytes, mime = (None, None)
     if cover_image:
-        img_bytes, mime = await utils_images.process_image(cover_image)
+        img_bytes, mime = await utils.process_image(cover_image)
 
     catalog_in = schemas.CatalogCreate(
         title=title,
@@ -122,7 +122,7 @@ async def protected_update_catalog(
 
     img_bytes, mime = (None, None)
     if cover_image:
-        img_bytes, mime = await utils_images.process_image(cover_image)
+        img_bytes, mime = await utils.process_image(cover_image)
 
     updates = schemas.CatalogUpdate(
         title=title,

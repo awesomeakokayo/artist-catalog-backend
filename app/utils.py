@@ -5,7 +5,7 @@ from PIL import Image
 
 ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png", "gif", "webp"}
 
-async def save_upload_file_to_db(upload_file: UploadFile) -> tuple:
+async def process_image(upload_file: UploadFile) -> tuple:
     """
     Process an uploaded file and return (bytes, mime, unique_name).
     You can then insert these into Neon DB.
