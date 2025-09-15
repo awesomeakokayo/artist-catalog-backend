@@ -88,7 +88,8 @@ async def protected_create_catalog(
 ):
     img_bytes, mime = (None, None)
     if cover_image:
-        img_bytes, mime = await utils.process_image(cover_image)
+        img_bytes, mime, _ = await utils.process_image(cover_image)
+
 
     catalog_in = schemas.CatalogCreate(
         title=title,
