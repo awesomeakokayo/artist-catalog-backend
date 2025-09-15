@@ -29,15 +29,17 @@ def read_catalogs(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
             "title": obj.title,
             "description": obj.description,
             "cover_image": f"/catalogs/{obj.id}/image" if obj.cover_image_data else None,
-            "links": {
-                "Spotify": obj.spotify_url,
-                "AppleMusic": obj.apple_music_url,
-                "SoundCloud": obj.soundcloud_url,
-                "Boomplay": obj.boomplay_url,
-                "Audiomack": obj.audiomack_url,
-                "YouTubeMusic": obj.youtubemusic_url,
+             "links": {
+                "Spotify": {"url": obj.spotify_url, "logo": "/static/images/spotify.png"},
+                "AppleMusic": {"url": obj.apple_music_url, "logo": "/static/images/apple.png"},
+                "SoundCloud": {"url": obj.soundcloud_url, "logo": "/static/images/soundcloud.png"},
+                "Boomplay": {"url": obj.boomplay_url, "logo": "/static/images/boomplay.png"},
+                "Audiomack": {"url": obj.audiomack_url, "logo": "/static/images/audiomack.png"},
+                "YouTubeMusic": {"url": obj.youtubemusic_url, "logo": "/static/images/youtubemusic.png"} if obj.youtubemusic_url else None,
             }
         })
+    for r in results:
+        r["links"] = {k: v for k, v in r["links"].items() if v and v["url"]}
     return results
 
 @app.get("/catalogs/{catalog_id}")
@@ -51,14 +53,17 @@ def read_catalog(catalog_id: int, db: Session = Depends(get_db)):
         "description": obj.description,
         "cover_image": f"/catalogs/{obj.id}/image" if obj.cover_image_data else None,
         "links": {
-            "Spotify": obj.spotify_url,
-            "AppleMusic": obj.apple_music_url,
-            "SoundCloud": obj.soundcloud_url,
-            "Boomplay": obj.boomplay_url,
-            "Audiomack": obj.audiomack_url,
-            "YouTubeMusic": obj.youtubemusic_url,
+            "Spotify": {"url": obj.spotify_url, "logo": "/static/images/spotify.png"},
+            "AppleMusic": {"url": obj.apple_music_url, "logo": "/static/images/apple.png"},
+            "SoundCloud": {"url": obj.soundcloud_url, "logo": "/static/images/soundcloud.png"},
+            "Boomplay": {"url": obj.boomplay_url, "logo": "/static/images/boomplay.png"},
+            "Audiomack": {"url": obj.audiomack_url, "logo": "/static/images/audiomack.png"},
+            "YouTubeMusic": {"url": obj.youtubemusic_url, "logo": "/static/images/youtubemusic.png"} if obj.youtubemusic_url else None,
         }
     }
+
+    track["links"] = {k: v for k, v in track["links"].items() if v and v["url"]}
+    return track
 
 @app.get("/catalogs/{catalog_id}/image")
 def get_catalog_image(catalog_id: int, db: Session = Depends(get_db)):
