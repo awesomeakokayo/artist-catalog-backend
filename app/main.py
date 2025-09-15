@@ -4,9 +4,7 @@ from fastapi.responses import Response
 from fastapi.middleware.cors import CORSMiddleware
 from . import models, schemas, crud, database, auth, utils
 from fastapi.staticfiles import StaticFiles
-
-app.mount("/static", StaticFiles(directory="static"), name="static")
-
+import os
 
 models.Base.metadata.create_all(bind=database.engine)
 
@@ -20,6 +18,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+static_path = os.path.join(os.path.dirname(__file__), "static")
+app.mount("/static", StaticFiles(directory=static_path), name="static")
 
 get_db = database.get_db
 
