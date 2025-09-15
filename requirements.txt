@@ -8,6 +8,5 @@ python-multipart
 python-jose[cryptography]
 passlib[bcrypt]
 aiofiles
-python-jose[cryptography]
 psycopg2-binary
-
+Pillow
