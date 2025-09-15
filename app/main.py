@@ -3,6 +3,10 @@ from sqlalchemy.orm import Session
 from fastapi.responses import Response
 from fastapi.middleware.cors import CORSMiddleware
 from . import models, schemas, crud, database, auth, utils
+from fastapi.staticfiles import StaticFiles
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 
 models.Base.metadata.create_all(bind=database.engine)
 
@@ -47,7 +51,7 @@ def read_catalog(catalog_id: int, db: Session = Depends(get_db)):
     obj = crud.get_catalog(db, catalog_id)
     if not obj:
         raise HTTPException(status_code=404, detail="Catalog not found")
-    return {
+    track = {
         "id": obj.id,
         "title": obj.title,
         "description": obj.description,
