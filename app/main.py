@@ -1,10 +1,15 @@
-from fastapi import FastAPI, Depends, HTTPException, UploadFile, File, Form
+from fastapi import FastAPI, Depends, HTTPException, status, UploadFile, File, Form
 from sqlalchemy.orm import Session
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+bearer_scheme = HTTPBearer()
 from fastapi.responses import Response
 from fastapi.middleware.cors import CORSMiddleware
 from . import models, schemas, crud, database, auth, utils
 from fastapi.staticfiles import StaticFiles
+from dotenv import load_dotenv
 import os
+
+load_dotenv()
 
 models.Base.metadata.create_all(bind=database.engine)
 
@@ -23,6 +28,24 @@ static_path = os.path.join(os.path.dirname(__file__), "static")
 app.mount("/static", StaticFiles(directory=static_path), name="static")
 
 get_db = database.get_db
+
+def verify_token_header(credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
+    """Verify Bearer JWT token in Authorization header."""
+    token = credentials.credentials if credentials else None
+    if not token:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Missing token")
+    payload = auth.decode_token(token)
+    if not payload:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
+    return payload
+
+@app.post("/admin/login")
+def admin_login(username: str = Form(...), password: str = Form(...)):
+    """Admin login endpoint."""
+    if not auth.authenticate_admin(username, password):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
+    access_token = auth.create_access_token({"sub": username})
+    return {"access_token": access_token, "token_type": "bearer"}
 
 @app.get("/catalogs/")
 def read_catalogs(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
